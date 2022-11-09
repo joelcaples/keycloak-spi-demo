@@ -1,0 +1,58 @@
+Notes:
+
+	- Out of the box support for 2FA using TOTP. Advertises support for Google 
+	  Authenticator or FreeOTP, but seems to work with any authenticator.  Also
+      tested with LastPass Authenticator
+      - To configure Hash, # Digits, Expiration configuratble in Keycloak: 
+	    - In Keycloak: Configure -> Authentication -> OTP Policy
+      - To require all new Users to use Authenticator 2FA:
+	    - In Keycloak: Configure -> Authentication -> Required Actions -> Check 
+		  Configure OTP "Default Action" checkbox
+	  - To require all existing Users to configure and use Authenticator 2FA:
+		- TBD
+		
+Resources:
+	
+	Niko Köbler custom Java plug-in
+	- https://www.n-k.de/2020/12/keycloak-2fa-sms-authentication.html
+	
+	
+
+Suggested Cards:
+
+	1. As a User, I want to see my name in the toolbar of the application 
+	   so that I know the context of the currently logged in user
+	
+	2. As a User, I want a Logout link in the toolbar of the application 
+	   so that I can terminate the currently logged in Session
+	
+	3. As a System Administrator, I want to be able to configure my application
+	   to use MFA via Google Authenticator or FreeOtp
+	   So that I can provide 2-Factor Authentication Capabilities
+	   
+	
+
+
+Java Development
+
+Install VS Code "Extension Pack for Java"
+Install a JDK (Several options are available)
+	Microsoft Build of OpenJDK 17 https://aka.ms/download-jdk/microsoft-jdk-17.0.5-windows-x64.msi
+	
+		
+=================================================================
+ Keycloak Server Development Notes
+=================================================================
+Service Provider Interfaces (SPI) - Allows for the implementation of custom providers
+  - To implement an SPI you need to 
+    - Implement its ProviderFactory and Provider interfaces
+    - Create Service configuration file
+
+
+
+
+=================================================================
+JAVA PROJECT
+=================================================================
+VS Code
+ctl+shift+p -> New Java project

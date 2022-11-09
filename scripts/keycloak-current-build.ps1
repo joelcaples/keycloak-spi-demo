@@ -1,0 +1,1 @@
+docker build -f ./keycloak-current.dockerfile -t keycloak-current .
