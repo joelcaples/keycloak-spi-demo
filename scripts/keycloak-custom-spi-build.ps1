@@ -1,1 +1,1 @@
-docker build -f ./keycloak-theme-spi.dockerfile -t keycloak-theme-spi .
+docker build -f ./keycloak-custom-spi.dockerfile -t keycloak-custom-spi .
