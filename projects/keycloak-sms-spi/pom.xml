@@ -84,6 +84,7 @@
 
 	<build>
 		<finalName>${project.groupId}.${project.artifactId}</finalName>
+		<!-- <outputDirectory>${project.build.directory}/../dist</outputDirectory> -->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
