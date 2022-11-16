@@ -17,6 +17,12 @@ Resources:
 	- https://www.n-k.de/2020/12/keycloak-2fa-sms-authentication.html
 
 	
+    1. Create (copy) a new flow for browser-based authentication and adjust it to your needs. Add an execution for the “SMS Authentication”.
+    2. Configure the “SMS Authentication” execution step with the values which fits best your needs.
+    3. Set the new created flow as “Browser Flow” in the Authentication / Bindings tab in the admin console of your realm.
+    4. The default form to enter the code sent by SMS
+    5. Example SMS received with configured sender ID “Keycloak”
+
 	
 	
 
@@ -58,3 +64,14 @@ JAVA PROJECT
 =================================================================
 VS Code
 ctl+shift+p -> New Java project
+
+
+
+
+CONTAINER
+
+Logs are at:
+	$KEYCLOAK_DIR/standalone/log/server.log
+	a.k.a.
+	opt/jboss/keycloak/standalone/log/server.log
+
