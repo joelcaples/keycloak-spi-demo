@@ -8,6 +8,7 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.provider.ProviderConfigProperty;
 
+import org.jboss.logging.Logger;
 import java.util.List;
 
 /**
@@ -16,19 +17,23 @@ import java.util.List;
 public class SmsAuthenticatorFactory implements AuthenticatorFactory {
 
 	public static final String PROVIDER_ID = "sms-authenticator";
+	private static final Logger LOG = Logger.getLogger(SmsAuthenticatorFactory.class);
 
 	@Override
 	public String getId() {
+		LOG.warn(String.format("***** PROP PROVIDER_ID *****"));
 		return PROVIDER_ID;
 	}
 
 	@Override
 	public String getDisplayType() {
+		LOG.warn(String.format("***** PROP Display Type *****"));
 		return "SMS Authentication";
 	}
 
 	@Override
 	public String getHelpText() {
+		LOG.warn(String.format("***** HelpText *****"));
 		return "Validates an OTP sent via SMS to the users mobile phone.";
 	}
 
@@ -54,6 +59,7 @@ public class SmsAuthenticatorFactory implements AuthenticatorFactory {
 
 	@Override
 	public List<ProviderConfigProperty> getConfigProperties() {
+		LOG.warn(String.format("***** GetConfigProperties *****"));
 		return List.of(
 			new ProviderConfigProperty("length", "Code length", "The number of digits of the generated code.", ProviderConfigProperty.STRING_TYPE, 6),
 			new ProviderConfigProperty("ttl", "Time-to-live", "The time to live in seconds for the code to be valid.", ProviderConfigProperty.STRING_TYPE, "300"),
@@ -69,14 +75,17 @@ public class SmsAuthenticatorFactory implements AuthenticatorFactory {
 
 	@Override
 	public void init(Config.Scope config) {
+		LOG.warn(String.format("***** Init *****"));
 	}
 
 	@Override
 	public void postInit(KeycloakSessionFactory factory) {
+		LOG.warn(String.format("***** PostInit *****"));
 	}
 
 	@Override
 	public void close() {
+		LOG.warn(String.format("***** Close *****"));
 	}
 
 }

@@ -15,6 +15,7 @@ import org.keycloak.theme.Theme;
 
 import javax.ws.rs.core.Response;
 import java.util.Locale;
+import org.jboss.logging.Logger;
 
 /**
  * @author Niko Köbler, https://www.n-k.de, @dasniko
@@ -22,6 +23,7 @@ import java.util.Locale;
 public class SmsAuthenticator implements Authenticator {
 
 	private static final String TPL_CODE = "login-sms.ftl";
+	private static final Logger LOG = Logger.getLogger(SmsAuthenticatorFactory.class);
 
 	@Override
 	public void authenticate(AuthenticationFlowContext context) {
@@ -41,15 +43,34 @@ public class SmsAuthenticator implements Authenticator {
 		authSession.setAuthNote("ttl", Long.toString(System.currentTimeMillis() + (ttl * 1000L)));
 
 		try {
-			Theme theme = session.theme().getTheme(Theme.Type.LOGIN);
+			LOG.warn(String.format("***** Getting Theme... *****"));
+			// Theme theme = session.theme().getTheme(Theme.Type.LOGIN);
+			Theme theme = session.theme().getTheme("login-sms", Theme.Type.LOGIN);
+			LOG.warn(String.format("***** Getting Locale... *****"));
 			Locale locale = session.getContext().resolveLocale(user);
-			String smsAuthText = theme.getMessages(locale).getProperty("smsAuthText");
+			LOG.warn(String.format("***** Getting Sms Auth Text... *****"));
+			// String smsAuthText = theme.getMessages(locale).getProperty("smsAuthText");
+			String smsAuthText = "AUTH TEXT";
+			LOG.warn(String.format("***** Getting Sms Text... *****"));
+			LOG.warn(String.format("***** DETAILS:... *****"));
+			LOG.warn(String.format("*****     smsAuthText: %s", smsAuthText));
+			LOG.warn(String.format("*****     code: %s", code));
+			LOG.warn(String.format("*****     ttl: %s", ttl));
+			LOG.warn(String.format("*****     locale: %s", locale));
+			LOG.warn(String.format("*****     locale display name: %s", locale.getDisplayName()));
+			LOG.warn(String.format("*****     locale language: %s", locale.getLanguage()));
+			LOG.warn(String.format("*****     theme: %s", theme));
+			LOG.warn(String.format("*****     theme name: %s", theme.getName()));
 			String smsText = String.format(smsAuthText, code, Math.floorDiv(ttl, 60));
 
+			LOG.warn(String.format("***** Getting Factory... *****"));
 			SmsServiceFactory.get(config.getConfig()).send(mobileNumber, smsText);
 
+			LOG.warn(String.format("***** Challenge... *****"));
 			context.challenge(context.form().setAttribute("realm", context.getRealm()).createForm(TPL_CODE));
 		} catch (Exception e) {
+			LOG.warn(String.format("***** Exception... *****"));
+			LOG.warn(String.format(e.getMessage()));
 			context.failureChallenge(AuthenticationFlowError.INTERNAL_ERROR,
 				context.form().setError("smsAuthSmsNotSent", e.getMessage())
 					.createErrorPage(Response.Status.INTERNAL_SERVER_ERROR));

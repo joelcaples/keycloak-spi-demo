@@ -1,0 +1,12 @@
+{
+    "themes": [
+      {
+        "name": "login-sms",
+        "types": [
+          "login"
+        ]
+      }
+    ]
+  }
+  
+  
