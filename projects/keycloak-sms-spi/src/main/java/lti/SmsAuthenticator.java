@@ -44,8 +44,15 @@ public class SmsAuthenticator implements Authenticator {
 
 		try {
 			LOG.warn(String.format("***** Getting Theme... *****"));
-			// Theme theme = session.theme().getTheme(Theme.Type.LOGIN);
 			Theme theme = session.theme().getTheme("login-sms", Theme.Type.LOGIN);
+			LOG.warn(String.format("*****     Theme Name: %s", theme.getName()));
+
+
+			// LOG.warn(String.format("***** Getting Theme Alt... *****"));
+			// Theme themeAlt = session.theme().getTheme(Theme.Type.LOGIN);
+			// LOG.warn(String.format("*****     Theme Alt Name: %s", themeAlt.getName()));
+
+
 			LOG.warn(String.format("***** Getting Locale... *****"));
 			Locale locale = session.getContext().resolveLocale(user);
 			LOG.warn(String.format("***** Getting Sms Auth Text... *****"));
@@ -66,8 +73,13 @@ public class SmsAuthenticator implements Authenticator {
 			LOG.warn(String.format("***** Getting Factory... *****"));
 			SmsServiceFactory.get(config.getConfig()).send(mobileNumber, smsText);
 
+			LOG.warn(String.format("***** Creating Form... *****"));
+			Response challenge = context.form().createForm("login-sms.ftl");
+			// context.challenge(context.form().setAttribute("realm", context.getRealm()).createForm(TPL_CODE));
+
 			LOG.warn(String.format("***** Challenge... *****"));
-			context.challenge(context.form().setAttribute("realm", context.getRealm()).createForm(TPL_CODE));
+			context.challenge(challenge);
+
 		} catch (Exception e) {
 			LOG.warn(String.format("***** Exception... *****"));
 			LOG.warn(String.format(e.getMessage()));
