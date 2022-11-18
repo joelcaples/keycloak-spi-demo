@@ -1,1 +1,0 @@
-docker build -f ./keycloak-dasniko-spi.dockerfile -t keycloak-dasniko-spi .
