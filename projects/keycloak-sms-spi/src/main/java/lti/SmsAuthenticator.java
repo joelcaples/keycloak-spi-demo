@@ -45,20 +45,16 @@ public class SmsAuthenticator implements Authenticator {
 		try {
 			LOG.warn(String.format("***** Getting Theme... *****"));
 			Theme theme = session.theme().getTheme("login-sms", Theme.Type.LOGIN);
+
 			LOG.warn(String.format("*****     Theme Name: %s", theme.getName()));
-
-
-			// LOG.warn(String.format("***** Getting Theme Alt... *****"));
-			// Theme themeAlt = session.theme().getTheme(Theme.Type.LOGIN);
-			// LOG.warn(String.format("*****     Theme Alt Name: %s", themeAlt.getName()));
-
 
 			LOG.warn(String.format("***** Getting Locale... *****"));
 			Locale locale = session.getContext().resolveLocale(user);
+
 			LOG.warn(String.format("***** Getting Sms Auth Text... *****"));
 			// String smsAuthText = theme.getMessages(locale).getProperty("smsAuthText");
 			String smsAuthText = "AUTH TEXT";
-			LOG.warn(String.format("***** Getting Sms Text... *****"));
+
 			LOG.warn(String.format("***** DETAILS:... *****"));
 			LOG.warn(String.format("*****     smsAuthText: %s", smsAuthText));
 			LOG.warn(String.format("*****     code: %s", code));
@@ -68,13 +64,15 @@ public class SmsAuthenticator implements Authenticator {
 			LOG.warn(String.format("*****     locale language: %s", locale.getLanguage()));
 			LOG.warn(String.format("*****     theme: %s", theme));
 			LOG.warn(String.format("*****     theme name: %s", theme.getName()));
+
+			LOG.warn(String.format("***** Getting Sms Text... *****"));
 			String smsText = String.format(smsAuthText, code, Math.floorDiv(ttl, 60));
 
 			LOG.warn(String.format("***** Getting Factory... *****"));
 			SmsServiceFactory.get(config.getConfig()).send(mobileNumber, smsText);
 
 			LOG.warn(String.format("***** Creating Form... *****"));
-			Response challenge = context.form().createForm("login-sms.ftl");
+			Response challenge = context.form().createForm(TPL_CODE);
 			// context.challenge(context.form().setAttribute("realm", context.getRealm()).createForm(TPL_CODE));
 
 			LOG.warn(String.format("***** Challenge... *****"));
