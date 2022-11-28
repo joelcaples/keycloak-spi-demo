@@ -1,6 +1,9 @@
 package lti;
 
 import lti.gateway.SmsServiceFactory;
+// import lti.models.TriviaQuestion;
+import lti.models.TriviaQuestionResults;
+
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.AuthenticationFlowError;
 import org.keycloak.authentication.Authenticator;
@@ -13,9 +16,21 @@ import org.keycloak.models.UserModel;
 import org.keycloak.sessions.AuthenticationSessionModel;
 import org.keycloak.theme.Theme;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+// import javax.ws.rs.core.GenericType;
+
+// import com.openshift.restclient.ClientBuilder;
+// import com.openshift.restclient.IClient;
+
 import javax.ws.rs.core.Response;
+
+// import java.util.List;
 import java.util.Locale;
 import org.jboss.logging.Logger;
+// import javax.ws.rs.core.Response.Status;
 
 /**
  * @author Niko Köbler, https://www.n-k.de, @dasniko
@@ -41,6 +56,46 @@ public class SmsAuthenticator implements Authenticator {
 		AuthenticationSessionModel authSession = context.getAuthenticationSession();
 		authSession.setAuthNote("code", code);
 		authSession.setAuthNote("ttl", Long.toString(System.currentTimeMillis() + (ttl * 1000L)));
+
+		try {
+			LOG.warn(String.format("***** CALLING EXTERNAL API... *****"));
+            // String externalApplicationUrl = "https://catfact.ninja/fact";
+            String externalApplicationUrl = "https://opentdb.com/api.php?amount=1&category=27&type=multiple";
+            // String externalApplicationUrl = "https://api.api-ninjas.com/v1/trivia?category=music";
+
+			// Response response = Response
+            //   .status(Status.FOUND)
+            //   .header("Location", externalApplicationUrl)
+            //   .build();
+
+			// IClient client = new ClientBuilder(externalApplicationUrl).build();
+			// Response response = client.get("fact");
+
+			Client client = ClientBuilder.newClient();
+			String response = client.target(externalApplicationUrl).request().get(String.class);
+			// List<TriviaQuestion> response = client.target(externalApplicationUrl).request()
+            //                     // .accept("application/xml")
+            //                     .get(new GenericType<List<TriviaQuestion>>() {});
+			
+			LOG.warn(response.toString());
+
+            ObjectMapper om = new ObjectMapper();
+            TriviaQuestionResults data = om.readValue(response, TriviaQuestionResults.class);
+            System.out.println(data.results.get(0).question);
+
+
+			// LOG.warn(response.get(0).category);
+			// LOG.warn(response.get(0).question);
+			// LOG.warn(response.get(0).correct_answer);
+			// LOG.warn(response.get(0).incorrect_answers);
+
+			// LOG.warn(response.readEntity(String.class));
+			// LOG.warn(response.getLength());
+			// LOG.warn(response.getEntity());
+		} catch(Exception e) {
+			LOG.warn(String.format("***** Exception... *****"));
+			LOG.warn(String.format(e.getMessage()));
+		}
 
 		try {
 			LOG.warn(String.format("***** Getting Theme... *****"));
